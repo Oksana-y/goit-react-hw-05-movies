@@ -1,10 +1,9 @@
-// import { SingleMovie } from 'Pages/MovieDetails/MovieDetails';
-import axios from 'axios';
 import React, { Suspense, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Outlet } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import { Button, Input, StyledLink, MovieTitle } from './Movies.styled';
+import { getQuery } from '../../services/Api';
 
 const Movies = () => {
   const [movies, setMovies] = useState([]);
@@ -14,6 +13,9 @@ const Movies = () => {
 
   const handleSubmit = e => {
     e.preventDefault();
+    if (e.currentTarget.query.value === '') {
+      return;
+    }
     const form = e.currentTarget;
     setSearchParams({ query: form.elements.query.value });
     form.reset();
@@ -23,11 +25,15 @@ const Movies = () => {
     if (query === '' || query === null) {
       return;
     }
-    axios
-      .get(
-        `https://api.themoviedb.org/3/search/movie?query=${query}&include_adult=false&language=en-US&page=1&api_key=ca0bc941de48c2ff206be5206128b701`
-      )
-      .then(res => setMovies(res.data.results));
+    const fetchQuery = async () => {
+      try {
+        const movies = await getQuery(query);
+        setMovies(movies);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchQuery();
   }, [query]);
 
   return (

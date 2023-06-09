@@ -1,34 +1,32 @@
-import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { Suspense } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useParams, Outlet } from 'react-router-dom';
 import {
+  Button,
   StyledLink,
   DetailsNav,
   BoxMovie,
   BoxDetails,
 } from './MovieDetails.styled';
+import { getMovie } from '../../services/Api';
 
 const MovieDetails = () => {
   const { id } = useParams();
   const [movie, setMovie] = useState(null);
+  const navigate = useNavigate();
+  const location = useLocation();
+  console.log(location);
+
+  const goBackButtonHandler = () => {
+    navigate(location.state?.from, { replace: true } ?? '/');
+  };
+  
 
   useEffect(() => {
-    const API_KEY = `ca0bc941de48c2ff206be5206128b701`;
-    const getMovieService = axios.create({
-      baseURL: 'https://api.themoviedb.org/3/',
-    });
-
-    const getMovie = async () => {
-      const { data } = await getMovieService.get(
-        `/movie/${id}?api_key=${API_KEY}`
-      );
-      return data;
-    };
-
-    const fetchMovie = async () => {
+        const fetchMovie = async () => {
       try {
-        const movie = await getMovie();
+        const movie = await getMovie(id);
         setMovie(movie);
       } catch (error) {
         console.log(error);
@@ -42,6 +40,9 @@ const MovieDetails = () => {
 
   return (
     <>
+      <Button type="button" onClick={goBackButtonHandler}>
+        Go back
+      </Button>
       <BoxMovie>
         <img
           src={`https://image.tmdb.org/t/p/w300${poster_path}`}
@@ -64,10 +65,14 @@ const MovieDetails = () => {
       <DetailsNav>
         <ul>
           <li>
-            <StyledLink to="cast">Cast</StyledLink>
+            <StyledLink to="cast" state={location.state}>
+              Cast
+            </StyledLink>
           </li>
           <li>
-            <StyledLink to="reviews">Reviews</StyledLink>
+            <StyledLink to="reviews" state={location.state}>
+              Reviews
+            </StyledLink>
           </li>
         </ul>
       </DetailsNav>

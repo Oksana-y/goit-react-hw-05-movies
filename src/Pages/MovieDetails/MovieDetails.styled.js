@@ -25,3 +25,20 @@ export const BoxMovie = styled.div`
 export const BoxDetails = styled.div`
   margin-left: 10px;
 `;
+export const Button = styled.button`
+  background-color: lightgrey; /* Green */
+  border: none;
+  margin-bottom:20px;
+  color: black;
+  padding: 5px 15px;
+  text-align: center;
+  display: inline-block;
+  font-size: 16px;
+  font-weight: 900;
+  &:hover {
+    box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.24),
+      0 17px 50px 0 rgba(0, 0, 0, 0.19);
+  }
+  border-radius: 5px;
+  cursor: pointer;
+`;

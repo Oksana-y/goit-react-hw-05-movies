@@ -4,17 +4,17 @@ import { Header, Button, Main } from './Layout.styled';
 import Navigation from './Navigation';
 
 export const Layout = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
-
   return (
     <>
       <Header>
-        {location.pathname !== '/' && (
-          <Button type="button" onClick={() => navigate(-1)}>
+        {/* {location.pathname !== '/' && (
+          <Button
+            type="button"
+            onClick={goBackButtonHandler}
+          >
             Go back
           </Button>
-        )}
+        )} */}
 
         <Navigation />
       </Header>
